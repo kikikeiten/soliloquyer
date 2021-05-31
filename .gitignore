@@ -20,3 +20,6 @@ Thumbs.db
 .DS_Store
 
 persistence.xml
+
+soliloquyer.iml
+.idea/**
