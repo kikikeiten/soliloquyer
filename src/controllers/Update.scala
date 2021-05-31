@@ -18,7 +18,7 @@ import java.util.List
 
 @WebServlet("/update")
 @SerialVersionUID(1L)
-class UpdateServlet()
+class Update()
 
   extends Nothing {
   @throws[ServletException]

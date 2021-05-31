@@ -16,7 +16,7 @@ import java.util.List
 
 @WebServlet("/index")
 @SerialVersionUID(1L)
-class IndexServlet()
+class Index()
 
   extends Nothing {
   @throws[ServletException]

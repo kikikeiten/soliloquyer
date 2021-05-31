@@ -11,7 +11,7 @@ import models.Message
 
 @WebServlet("/new")
 @SerialVersionUID(1L)
-class NewServlet()
+class New()
 
   extends Nothing {
   @throws[ServletException]

@@ -13,7 +13,7 @@ import utils.DBUtil
 
 @WebServlet("/show")
 @SerialVersionUID(1L)
-class ShowServlet()
+class Show()
 
   extends Nothing {
   @throws[ServletException]

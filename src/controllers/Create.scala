@@ -16,22 +16,11 @@ import utils.DBUtil
 
 import java.util.List
 
-
-/**
- * Servlet implementation class CreateServlet
- */
 @WebServlet("/create")
 @SerialVersionUID(1L)
 class Create()
 
-/**
- * @see HttpServlet#HttpServlet()
- */
-// TODO Auto-generated constructor stub
   extends Nothing {
-  /**
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-   */
   @throws[ServletException]
   @throws[IOException]
   protected def doPost(request: Nothing, response: Nothing): Unit = {
@@ -46,24 +35,21 @@ class Create()
       val currentTime = new Timestamp(System.currentTimeMillis)
       m.setCreated_at(currentTime)
       m.setUpdated_at(currentTime)
-      // バリデーションを実行してエラーがあったら新規登録のフォームに戻る
       val errors = MessageValidator.validate(m)
       if (errors.size > 0) {
         em.close
-        // フォームに初期値を設定、さらにエラーメッセージを送る
         request.setAttribute("_token", request.getSession.getId)
         request.setAttribute("message", m)
         request.setAttribute("errors", errors)
         val rd = request.getRequestDispatcher("/WEB-INF/views/messages/new.jsp")
         rd.forward(request, response)
       }
-      else { // データベースに保存
+      else {
         em.getTransaction.begin
         em.persist(m)
         em.getTransaction.commit
         request.getSession.setAttribute("flush", "登録が完了しました。")
         em.close
-        // indexのページにリダイレクト
         response.sendRedirect(request.getContextPath + "/index")
       }
     }
