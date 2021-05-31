@@ -16,54 +16,43 @@ import utils.DBUtil
 
 import java.util.List
 
-
-/**
- * Servlet implementation class CreateServlet
- */
-@WebServlet("/create")
+@WebServlet("/update")
 @SerialVersionUID(1L)
-class CreateServlet()
+class UpdateServlet()
 
-/**
- * @see HttpServlet#HttpServlet()
- */
-// TODO Auto-generated constructor stub
   extends Nothing {
-  /**
-   * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-   */
   @throws[ServletException]
   @throws[IOException]
   protected def doPost(request: Nothing, response: Nothing): Unit = {
+
     val _token = request.getParameter("_token")
+
     if (_token != null && _token == request.getSession.getId) {
       val em = DBUtil.createEntityManager
-      val m = new Message
+      val m = em.find(classOf[Message], request.getSession.getAttribute("message_id").asInstanceOf[Integer])
       val title = request.getParameter("title")
       m.setTitle(title)
       val content = request.getParameter("content")
       m.setContent(content)
       val currentTime = new Timestamp(System.currentTimeMillis)
-      m.setCreated_at(currentTime)
       m.setUpdated_at(currentTime)
-      // バリデーションを実行してエラーがあったら新規登録のフォームに戻る
+
       val errors = MessageValidator.validate(m)
+
       if (errors.size > 0) {
         em.close
-        // フォームに初期値を設定、さらにエラーメッセージを送る
         request.setAttribute("_token", request.getSession.getId)
         request.setAttribute("message", m)
         request.setAttribute("errors", errors)
-        val rd = request.getRequestDispatcher("/WEB-INF/views/messages/new.jsp")
+        val rd = request.getRequestDispatcher("/WEB-INF/views/messages/edit.jsp")
         rd.forward(request, response)
       }
-      else { // データベースに保存
+      else {
         em.getTransaction.begin
-        em.persist(m)
         em.getTransaction.commit
-        request.getSession.setAttribute("flush", "登録が完了しました。")
+        request.getSession.setAttribute("flush", "更新が完了しました。")
         em.close
-        // indexのページにリダイレクト
+        request.getSession.removeAttribute("message_id")
         response.sendRedirect(request.getContextPath + "/index")
       }
     }
